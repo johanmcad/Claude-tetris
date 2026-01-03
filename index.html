@@ -14,8 +14,8 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Courier New', monospace;
+            background: radial-gradient(ellipse at center, #0a0e27 0%, #000000 100%);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -24,15 +24,37 @@
             touch-action: none;
             -webkit-user-select: none;
             user-select: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                linear-gradient(0deg, transparent 24%, rgba(0, 242, 254, 0.05) 25%, rgba(0, 242, 254, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 242, 254, 0.05) 75%, rgba(0, 242, 254, 0.05) 76%, transparent 77%, transparent),
+                linear-gradient(90deg, transparent 24%, rgba(0, 242, 254, 0.05) 25%, rgba(0, 242, 254, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 242, 254, 0.05) 75%, rgba(0, 242, 254, 0.05) 76%, transparent 77%, transparent);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
         }
 
         .game-container {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(5, 10, 20, 0.85);
             border-radius: 15px;
             padding: 30px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 60px rgba(0, 242, 254, 0.4),
+                        0 0 100px rgba(255, 16, 240, 0.2),
+                        inset 0 0 80px rgba(0, 242, 254, 0.05);
+            border: 2px solid rgba(0, 242, 254, 0.5);
             display: flex;
             gap: 30px;
+            position: relative;
+            z-index: 1;
         }
 
         .game-area {
@@ -42,18 +64,48 @@
         }
 
         h1 {
-            color: #667eea;
+            color: #00f2fe;
             margin-bottom: 20px;
             text-align: center;
             font-size: 2.5em;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+            letter-spacing: 8px;
+            text-shadow:
+                0 0 10px #00f2fe,
+                0 0 20px #00f2fe,
+                0 0 30px #00f2fe,
+                0 0 40px #00a8ff,
+                0 0 70px #00a8ff,
+                0 0 80px #00a8ff;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow:
+                    0 0 10px #00f2fe,
+                    0 0 20px #00f2fe,
+                    0 0 30px #00f2fe,
+                    0 0 40px #00a8ff;
+            }
+            to {
+                text-shadow:
+                    0 0 20px #00f2fe,
+                    0 0 30px #00f2fe,
+                    0 0 40px #00f2fe,
+                    0 0 50px #00a8ff,
+                    0 0 70px #00a8ff;
+            }
         }
 
         #gameCanvas {
-            border: 3px solid #667eea;
+            border: 3px solid #00f2fe;
             border-radius: 8px;
             background: #000;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow:
+                0 0 20px rgba(0, 242, 254, 0.6),
+                0 0 40px rgba(0, 242, 254, 0.4),
+                inset 0 0 60px rgba(0, 242, 254, 0.1);
         }
 
         .sidebar {
@@ -64,46 +116,62 @@
         }
 
         .info-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: rgba(0, 10, 20, 0.6);
+            color: #00f2fe;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(0, 242, 254, 0.5);
+            box-shadow:
+                0 0 20px rgba(0, 242, 254, 0.3),
+                inset 0 0 20px rgba(0, 242, 254, 0.05);
         }
 
         .info-box h2 {
             margin-bottom: 10px;
             font-size: 1.2em;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            border-bottom: 2px solid rgba(0, 242, 254, 0.5);
             padding-bottom: 8px;
+            text-shadow: 0 0 10px #00f2fe;
+            letter-spacing: 2px;
         }
 
         .info-box p {
             font-size: 2em;
             font-weight: bold;
             margin-top: 10px;
+            color: #ff10f0;
+            text-shadow:
+                0 0 10px #ff10f0,
+                0 0 20px #ff10f0;
         }
 
         #nextPieceCanvas {
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.6);
             border-radius: 5px;
             margin-top: 10px;
             display: block;
             margin-left: auto;
             margin-right: auto;
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
         }
 
         .controls {
-            background: #f7f7f7;
+            background: rgba(0, 10, 20, 0.6);
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            border: 2px solid rgba(0, 242, 254, 0.3);
+            box-shadow:
+                0 0 15px rgba(0, 242, 254, 0.2),
+                inset 0 0 15px rgba(0, 242, 254, 0.05);
         }
 
         .controls h2 {
-            color: #667eea;
+            color: #00f2fe;
             margin-bottom: 15px;
             font-size: 1.2em;
+            text-shadow: 0 0 10px #00f2fe;
+            letter-spacing: 2px;
         }
 
         .controls ul {
@@ -112,14 +180,15 @@
 
         .controls li {
             padding: 8px 0;
-            color: #555;
+            color: #6dd5ed;
             font-size: 0.9em;
         }
 
         .controls strong {
-            color: #667eea;
+            color: #ff10f0;
             display: inline-block;
             min-width: 100px;
+            text-shadow: 0 0 5px #ff10f0;
         }
 
         button {
@@ -127,22 +196,35 @@
             padding: 15px;
             font-size: 1.1em;
             font-weight: bold;
-            color: white;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+            color: #00f2fe;
+            background: rgba(0, 20, 40, 0.8);
+            border: 2px solid #00f2fe;
             border-radius: 8px;
             cursor: pointer;
-            transition: transform 0.1s, box-shadow 0.1s;
+            transition: all 0.3s;
             margin-top: 10px;
+            box-shadow:
+                0 0 20px rgba(0, 242, 254, 0.5),
+                inset 0 0 20px rgba(0, 242, 254, 0.1);
+            text-shadow: 0 0 10px #00f2fe;
         }
 
         button:hover {
+            background: rgba(0, 242, 254, 0.2);
+            box-shadow:
+                0 0 30px rgba(0, 242, 254, 0.8),
+                0 0 50px rgba(0, 242, 254, 0.5),
+                inset 0 0 30px rgba(0, 242, 254, 0.2);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
 
         button:active {
             transform: translateY(0);
+            box-shadow:
+                0 0 15px rgba(0, 242, 254, 0.6),
+                inset 0 0 15px rgba(0, 242, 254, 0.15);
         }
 
         .game-over {
@@ -150,10 +232,14 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: white;
+            background: rgba(5, 10, 20, 0.95);
             padding: 40px;
             border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            border: 3px solid #00f2fe;
+            box-shadow:
+                0 0 60px rgba(0, 242, 254, 0.8),
+                0 0 100px rgba(255, 16, 240, 0.6),
+                inset 0 0 60px rgba(0, 242, 254, 0.1);
             text-align: center;
             display: none;
             z-index: 1000;
@@ -164,15 +250,21 @@
         }
 
         .game-over h2 {
-            color: #667eea;
+            color: #ff10f0;
             font-size: 2.5em;
             margin-bottom: 20px;
+            text-shadow:
+                0 0 20px #ff10f0,
+                0 0 40px #ff10f0,
+                0 0 60px #ff10f0;
+            letter-spacing: 4px;
         }
 
         .game-over p {
             font-size: 1.5em;
-            color: #555;
+            color: #00f2fe;
             margin-bottom: 30px;
+            text-shadow: 0 0 10px #00f2fe;
         }
 
         .mobile-controls {
@@ -190,24 +282,30 @@
         .control-btn {
             width: 70px;
             height: 70px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
+            background: rgba(0, 20, 40, 0.8);
+            border: 2px solid #ff10f0;
             border-radius: 12px;
-            color: white;
+            color: #ff10f0;
             font-size: 1.5em;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            transition: transform 0.1s, box-shadow 0.1s;
+            box-shadow:
+                0 0 20px rgba(255, 16, 240, 0.5),
+                inset 0 0 20px rgba(255, 16, 240, 0.1);
+            transition: all 0.2s;
             touch-action: manipulation;
             display: flex;
             align-items: center;
             justify-content: center;
+            text-shadow: 0 0 10px #ff10f0;
         }
 
         .control-btn:active {
             transform: scale(0.95);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 16, 240, 0.3);
+            box-shadow:
+                0 0 30px rgba(255, 16, 240, 0.8),
+                inset 0 0 30px rgba(255, 16, 240, 0.2);
         }
 
         .control-btn.wide {
@@ -378,17 +476,17 @@
         const ROWS = 20;
         const BLOCK_SIZE = 30;
 
-        // Colors for each tetromino
+        // Colors for each tetromino - Tron neon theme
         const COLORS = {
-            'I': '#00f0f0',
-            'O': '#f0f000',
-            'T': '#a000f0',
-            'S': '#00f000',
-            'Z': '#f00000',
-            'J': '#0000f0',
-            'L': '#f0a000',
+            'I': '#00f2fe',    // Neon cyan
+            'O': '#fffc00',    // Neon yellow
+            'T': '#ff10f0',    // Neon magenta
+            'S': '#39ff14',    // Neon green
+            'Z': '#ff073a',    // Neon red
+            'J': '#0d6efd',    // Neon blue
+            'L': '#ff8c00',    // Neon orange
             'empty': '#000000',
-            'grid': '#1a1a1a'
+            'grid': '#00f2fe'  // Cyan grid lines
         };
 
         // Tetromino shapes
@@ -434,29 +532,56 @@
             };
         }
 
-        // Draw a block
+        // Draw a block with Tron glow effect
         function drawBlock(ctx, x, y, color) {
-            ctx.fillStyle = color;
-            ctx.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
-            ctx.strokeStyle = '#000';
-            ctx.lineWidth = 2;
-            ctx.strokeRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+            const px = x * BLOCK_SIZE;
+            const py = y * BLOCK_SIZE;
+
+            // Draw glowing border
+            ctx.shadowBlur = 20;
+            ctx.shadowColor = color;
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 3;
+            ctx.strokeRect(px, py, BLOCK_SIZE, BLOCK_SIZE);
+
+            // Draw inner fill with gradient
+            const gradient = ctx.createLinearGradient(px, py, px + BLOCK_SIZE, py + BLOCK_SIZE);
+            gradient.addColorStop(0, color + '40');
+            gradient.addColorStop(0.5, color + '20');
+            gradient.addColorStop(1, color + '10');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(px + 2, py + 2, BLOCK_SIZE - 4, BLOCK_SIZE - 4);
+
+            // Draw bright inner border
+            ctx.strokeStyle = color;
+            ctx.lineWidth = 1;
+            ctx.strokeRect(px + 3, py + 3, BLOCK_SIZE - 6, BLOCK_SIZE - 6);
+
+            // Reset shadow
+            ctx.shadowBlur = 0;
         }
 
-        // Draw the board
+        // Draw the board with Tron grid
         function drawBoard() {
             // Draw background
             ctx.fillStyle = COLORS.empty;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Draw grid
+            // Draw glowing grid
             ctx.strokeStyle = COLORS.grid;
-            ctx.lineWidth = 1;
+            ctx.lineWidth = 0.5;
+            ctx.shadowBlur = 5;
+            ctx.shadowColor = COLORS.grid;
+            ctx.globalAlpha = 0.3;
+
             for (let row = 0; row < ROWS; row++) {
                 for (let col = 0; col < COLS; col++) {
                     ctx.strokeRect(col * BLOCK_SIZE, row * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
                 }
             }
+
+            ctx.globalAlpha = 1;
+            ctx.shadowBlur = 0;
 
             // Draw placed pieces
             for (let row = 0; row < ROWS; row++) {
