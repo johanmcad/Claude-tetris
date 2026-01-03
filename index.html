@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <title>Tetris Game</title>
     <style>
         * {
@@ -19,6 +21,9 @@
             align-items: center;
             min-height: 100vh;
             padding: 20px;
+            touch-action: none;
+            -webkit-user-select: none;
+            user-select: none;
         }
 
         .game-container {
@@ -170,14 +175,139 @@
             margin-bottom: 30px;
         }
 
+        .mobile-controls {
+            display: none;
+            margin-top: 20px;
+            gap: 10px;
+        }
+
+        .control-row {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .control-btn {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.5em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: transform 0.1s, box-shadow 0.1s;
+            touch-action: manipulation;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .control-btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .control-btn.wide {
+            width: 150px;
+        }
+
         @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
             .game-container {
                 flex-direction: column;
-                padding: 20px;
+                padding: 15px;
+                gap: 15px;
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .game-area {
+                width: 100%;
             }
 
             h1 {
+                font-size: 1.8em;
+                margin-bottom: 15px;
+            }
+
+            #gameCanvas {
+                width: 100%;
+                max-width: 300px;
+                height: auto;
+            }
+
+            .sidebar {
+                width: 100%;
+                min-width: 0;
+            }
+
+            .info-box {
+                padding: 15px;
+            }
+
+            .info-box h2 {
+                font-size: 1em;
+            }
+
+            .info-box p {
+                font-size: 1.5em;
+            }
+
+            .controls {
+                display: none;
+            }
+
+            .mobile-controls {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .game-over {
+                padding: 30px 20px;
+                width: 90%;
+                max-width: 400px;
+            }
+
+            .game-over h2 {
                 font-size: 2em;
+            }
+
+            .game-over p {
+                font-size: 1.2em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .control-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 1.2em;
+            }
+
+            .control-btn.wide {
+                width: 130px;
+            }
+
+            .info-box {
+                padding: 12px;
+            }
+
+            .info-box h2 {
+                font-size: 0.9em;
+            }
+
+            .info-box p {
+                font-size: 1.3em;
             }
         }
     </style>
@@ -216,6 +346,19 @@
                 </ul>
             </div>
             <button id="startButton">Start Game</button>
+            <div class="mobile-controls">
+                <div class="control-row">
+                    <button class="control-btn" id="btnRotate">↻</button>
+                </div>
+                <div class="control-row">
+                    <button class="control-btn" id="btnLeft">←</button>
+                    <button class="control-btn" id="btnDown">↓</button>
+                    <button class="control-btn" id="btnRight">→</button>
+                </div>
+                <div class="control-row">
+                    <button class="control-btn wide" id="btnDrop">DROP</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -591,6 +734,93 @@
 
         // Start button
         document.getElementById('startButton').addEventListener('click', startGame);
+
+        // Mobile control buttons
+        document.getElementById('btnLeft').addEventListener('click', (e) => {
+            e.preventDefault();
+            movePiece('left');
+            draw();
+        });
+
+        document.getElementById('btnRight').addEventListener('click', (e) => {
+            e.preventDefault();
+            movePiece('right');
+            draw();
+        });
+
+        document.getElementById('btnDown').addEventListener('click', (e) => {
+            e.preventDefault();
+            movePiece('down');
+            draw();
+        });
+
+        document.getElementById('btnRotate').addEventListener('click', (e) => {
+            e.preventDefault();
+            rotatePiece();
+            draw();
+        });
+
+        document.getElementById('btnDrop').addEventListener('click', (e) => {
+            e.preventDefault();
+            hardDrop();
+            draw();
+        });
+
+        // Touch swipe controls on canvas
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchEndX = 0;
+        let touchEndY = 0;
+
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        }, { passive: false });
+
+        canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            touchEndX = e.changedTouches[0].screenX;
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        }, { passive: false });
+
+        function handleSwipe() {
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+            const minSwipeDistance = 30;
+
+            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                // Horizontal swipe
+                if (Math.abs(deltaX) > minSwipeDistance) {
+                    if (deltaX > 0) {
+                        movePiece('right');
+                    } else {
+                        movePiece('left');
+                    }
+                }
+            } else {
+                // Vertical swipe
+                if (Math.abs(deltaY) > minSwipeDistance) {
+                    if (deltaY > 0) {
+                        movePiece('down');
+                    } else {
+                        rotatePiece();
+                    }
+                }
+            }
+            draw();
+        }
+
+        // Prevent double-tap zoom on mobile
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', (e) => {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, { passive: false });
 
         // Initial draw
         drawBoard();
