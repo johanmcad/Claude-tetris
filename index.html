@@ -274,6 +274,14 @@
             gap: 10px;
         }
 
+        .mobile-controls-top {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
         .control-row {
             display: flex;
             gap: 10px;
@@ -370,6 +378,10 @@
                 flex-direction: column;
             }
 
+            .mobile-controls-top {
+                display: flex;
+            }
+
             .game-over {
                 padding: 30px 20px;
                 width: 90%;
@@ -418,6 +430,17 @@
     <div class="game-container">
         <div class="game-area">
             <h1>TETRIS</h1>
+            <div class="mobile-controls-top">
+                <div class="control-row">
+                    <button class="control-btn" id="btnRotateTop">↻</button>
+                    <button class="control-btn wide" id="btnDropTop">DROP</button>
+                </div>
+                <div class="control-row">
+                    <button class="control-btn" id="btnLeftTop">←</button>
+                    <button class="control-btn" id="btnDownTop">↓</button>
+                    <button class="control-btn" id="btnRightTop">→</button>
+                </div>
+            </div>
             <canvas id="gameCanvas" width="300" height="600"></canvas>
         </div>
         <div class="sidebar">
@@ -890,6 +913,37 @@
         });
 
         document.getElementById('btnDrop').addEventListener('click', (e) => {
+            e.preventDefault();
+            hardDrop();
+            draw();
+        });
+
+        // Mobile control buttons (top)
+        document.getElementById('btnLeftTop').addEventListener('click', (e) => {
+            e.preventDefault();
+            movePiece('left');
+            draw();
+        });
+
+        document.getElementById('btnRightTop').addEventListener('click', (e) => {
+            e.preventDefault();
+            movePiece('right');
+            draw();
+        });
+
+        document.getElementById('btnDownTop').addEventListener('click', (e) => {
+            e.preventDefault();
+            movePiece('down');
+            draw();
+        });
+
+        document.getElementById('btnRotateTop').addEventListener('click', (e) => {
+            e.preventDefault();
+            rotatePiece();
+            draw();
+        });
+
+        document.getElementById('btnDropTop').addEventListener('click', (e) => {
             e.preventDefault();
             hardDrop();
             draw();
